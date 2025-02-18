@@ -1,9 +1,5 @@
 import json
 
-import requests
-
-from apis.universalis import Universalis
-from apis.xivapi import xivapi
 from data.Item import Item
 from data.Servers import Servers
 
