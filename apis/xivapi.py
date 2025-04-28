@@ -3,7 +3,7 @@ import requests
 
 class xivapi():
 	url = "https://v2.xivapi.com/api/"
-
+	# TODO: Add a cache for this function, it's not very efficient to call this every time - the data doesn't change that often.
 	def search(self, query:str) -> dict:
 		return	requests.get(self.url + "search", {
 		"sheets"   : "Item",

@@ -13,6 +13,7 @@ class Item():
 	def __init__(self, name, max_price):
 		self.item_name = name
 		self.item_id = xivapi().get_item_id(name)
+		self.max_price = max_price
 		servers = Servers().servers
 		for server in servers:
 			count = 0
@@ -29,4 +30,4 @@ class Item():
 
 
 	def __str__(self):
-		return self.item_name + "\n" +"\n".join([f"{server} : {count}" for server, count in self.available_items.items()])
+		return self.item_name + "\n" +"\n".join([f"{server} {self.max_price} : {count}" for server, count in self.available_items.items() if count > 0])
