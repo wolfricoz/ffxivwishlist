@@ -1,15 +1,25 @@
+import json
+import os.path
+from datetime import datetime
+
 import requests
 
 
 class xivapi():
 	url = "https://v2.xivapi.com/api/"
 	# TODO: Add a cache for this function, it's not very efficient to call this every time - the data doesn't change that often.
+
 	def search(self, query:str) -> dict:
-		return	requests.get(self.url + "search", {
+		result = self.get_from_cache(query)
+		if result:
+			return result
+		result = 	requests.get(self.url + "search", {
 		"sheets"   : "Item",
 		"query"    : f'Name="{query}"',
 		"language" : "en"
 	}).json()
+		self.add_to_cache(query, result)
+		return result
 
 
 	def find_key(self, data: dict, goal):
@@ -27,6 +37,36 @@ class xivapi():
 						if result :
 							return result
 		return None
+
+
+	def add_to_cache(self, item_name: str, data: dict):
+		# This function should add the item_id to a cache.
+		# For now, it will do nothing as a placeholder.
+
+
+		if not os.path.exists('data/cache.json'):
+			with open('data/cache.json', 'w') as f:
+				json.dump({item_name: data}, f, indent=4)
+				return
+		with open('data/cache.json', 'r') as f :
+			cache = json.load(f)
+		cache[item_name] = data
+		with open('data/cache.json', 'w') as f:
+			json.dump(cache, f, indent=4)
+
+
+	def get_from_cache(self, item_name: str):
+		# This function should retrieve the item_id from a cache if it exists.
+		# For now, it will return None as a placeholder.
+		if not os.path.exists('data/cache.json') :
+			return None
+		with open('data/cache.json', 'r') as f:
+			cache = json.load(f)
+			return cache.get(item_name, None)
+
+
+
+
 
 
 	def get_item_id(self, item):

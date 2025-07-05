@@ -13,3 +13,4 @@ class Universalis() :
       'User-Agent' : "Alices Shopping List"
     }
     ).json().get('listings', None)
+
